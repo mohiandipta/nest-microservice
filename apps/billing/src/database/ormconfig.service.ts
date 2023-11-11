@@ -1,6 +1,8 @@
+import { Injectable } from "@nestjs/common";
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { join } from "path";
 
+// @Injectable()
 class ConfigService {
     constructor(private env: { [k: string]: string | undefined }) { }
 
@@ -14,9 +16,9 @@ class ConfigService {
                 password: this.env.DB_PASSWORD,
                 database: this.env.DB_ORDERS,
                 logging: false,
-
+                autoLoadEntities: true,
                 entities: [
-                    __dirname + '/../../**/*.entity{.ts,.js}',
+                    __dirname + '../../../../apps/**/*.entity{.ts,.js}',
                 ],
 
                 migrationsTableName: 'migration',

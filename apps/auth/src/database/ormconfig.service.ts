@@ -1,0 +1,33 @@
+import { Injectable } from "@nestjs/common";
+import { TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { join } from "path";
+
+// @Injectable()
+class ConfigService {
+    constructor(private env: { [k: string]: string | undefined }) { }
+
+    public getTypeOrmConfig(): TypeOrmModuleOptions {
+        return {
+            type: 'mysql',
+            host: this.env.DB_HOST,
+            port: Number(this.env.DB_PORT),
+            username: this.env.DB_USERNAME,
+            password: this.env.DB_PASSWORD,
+            database: '',
+            logging: false,
+            
+            entities: [
+                __dirname + '/../**/*.entity{.ts,.js}',
+            ],
+
+            migrationsTableName: 'migration',
+            migrations: [join(__dirname, '..', 'migrations', '*.ts')],
+
+            synchronize: true,
+        }
+    }
+}
+
+const configService = new ConfigService(process.env);
+
+export default configService
